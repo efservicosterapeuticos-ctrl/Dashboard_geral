@@ -38,7 +38,6 @@
 </head>
 <body class="bg-[#FDFBF7] flex h-screen overflow-hidden">
 
-    <!-- ========== SIDEBAR ========== -->
     <aside class="w-72 bg-gradient-to-b from-[#8B6B53] via-[#7A5A44] to-[#5C4033] text-[#FDFBF7] flex flex-col shadow-2xl">
         <div class="p-8 border-b border-[#9D7E67] flex flex-col items-center text-center">
             <img src="./logo.png" alt="Logo" class="w-32 object-contain mb-4 drop-shadow-md">
@@ -67,25 +66,22 @@
         </div>
     </aside>
 
-    <!-- ========== MAIN ========== -->
     <main class="flex-1 flex flex-col overflow-hidden">
         <header class="bg-white/90 backdrop-blur-md border-b border-[#E6DCD3] p-5 flex justify-between items-center sticky top-0 z-10 shadow-sm">
             <div class="flex gap-4 items-center">
                 <select id="filtroSetor" onchange="carregarDadosReais()" class="bg-[#FDFBF7] border-2 border-[#D4B895] text-[#5C4033] rounded-lg px-4 py-2 text-sm font-bold focus:ring-2 focus:ring-[#8B6B53] outline-none cursor-pointer">
                     <option value="">Todos os Setores (Geral)</option>
-                    <option value="Financeiro">Financeiro</option>
-                    <option value="Produção">Produção</option>
-                    <option value="Logística">Logística</option>
                     <option value="Administrativo">Administrativo</option>
-                    <option value="Vendas">Vendas</option>
+                    <option value="Financeiro">Financeiro</option>
+                    <option value="Centro terapêuticos">Centro terapêuticos</option>
+                    <option value="Comercial">Comercial</option>
+                    <option value="Marketing">Marketing</option>
                 </select>
 
-                <!-- ✅ Botão com feedback de sincronização -->
                 <button id="btnSync" onclick="carregarDadosReais(true)" class="bg-[#8B6B53] hover:bg-[#7A5A44] text-[#FDFBF7] px-6 py-2.5 rounded-lg text-sm font-bold shadow-md hover:shadow-lg flex items-center gap-2 transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2"></path></svg>
                     Sincronizar
                 </button>
-                <!-- Mensagem de confirmação -->
                 <span id="msgSync" class="hidden"></span>
             </div>
 
@@ -100,7 +96,6 @@
 
         <div id="area-impressao" class="flex-1 overflow-y-auto p-8">
 
-            <!-- ===== DASHBOARD ===== -->
             <section id="tab-dashboard" class="tab-content tab-active">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 text-center">
                     <div class="bg-white p-6 rounded-xl card-glow border-l-4 border-[#8B6B53]">
@@ -121,7 +116,6 @@
                     </div>
                 </div>
 
-                <!-- ✅ Última atualização -->
                 <p id="ultima-atualizacao" class="text-[10px] text-[#B0907A] font-medium mb-6 text-right tracking-wide"></p>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -141,7 +135,6 @@
                 </div>
             </section>
 
-            <!-- ===== ANÁLISE ===== -->
             <section id="tab-analise" class="tab-content">
                 <div class="bg-white rounded-xl card-glow overflow-hidden border border-[#E6DCD3]">
                     <div class="bg-[#5C4033] p-6 text-[#FDFBF7] font-bold text-lg uppercase tracking-widest">Relatório Quantitativo</div>
@@ -162,7 +155,6 @@
                 </div>
             </section>
 
-            <!-- ===== MEDIDAS ===== -->
             <section id="tab-medidas" class="tab-content">
                 <div class="bg-white p-8 rounded-xl card-glow border border-[#E6DCD3]">
                     <div class="flex justify-between mb-8">
