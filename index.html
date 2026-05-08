@@ -370,13 +370,14 @@
             }).join('');
         }
 
+        // ✅ CORREÇÃO: Exibir nome completo do tópico na área de medidas
         function renderMedidas(topicos) {
             const acoes = topicos.filter(t => (t.gravidade * t.probabilidade) > 2.2);
             document.getElementById('lista-medidas').innerHTML = acoes.map(t => {
                 const risco = calcularRiscoFinal(t.gravidade, t.probabilidade);
                 const cor = risco === 'Crítico' ? 'bg-[#c14953]' : 'bg-[#e2725b]';
-                return `<div class="grid grid-cols-12 gap-2 items-center p-1">
-                    <div class="col-span-3 text-[10px] font-bold text-[#5C4033] truncate pr-2">${t.nome.split('-')[0]}</div>
+                return `<div class="grid grid-cols-12 gap-2 items-start p-2">
+                    <div class="col-span-3 text-[9px] font-bold text-[#5C4033] whitespace-normal pr-2 leading-tight">${t.nome}</div>
                     ${Array(6).fill(`<div class="h-3 ${cor} rounded shadow-sm opacity-90"></div>`).join('')}
                     ${Array(3).fill('<div class="h-3 bg-[#E6DCD3] rounded"></div>').join('')}
                 </div>`;
