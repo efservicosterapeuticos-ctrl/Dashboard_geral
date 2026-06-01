@@ -373,6 +373,35 @@
       color: var(--brown-light);
     }
 
+    /* ── COLLAPSE DESKTOP ── */
+    .sidebar {
+      transition: width 0.3s ease, min-width 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      width: 0;
+      min-width: 0;
+    }
+
+    .collapse-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 8px;
+      color: var(--brown-light);
+      font-size: 1.1rem;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .collapse-btn:hover {
+      background: rgba(107,74,42,0.08);
+      color: var(--brown-dark);
+    }
+
     /* ── MOBILE ── */
     .sidebar-toggle {
       display: none;
@@ -402,10 +431,13 @@
       }
 
       .sidebar.open { transform: translateX(0); }
+      .sidebar.collapsed { width: var(--sidebar-w); min-width: var(--sidebar-w); }
 
       .sidebar-overlay.open { display: block; }
 
       .sidebar-toggle { display: flex; align-items: center; }
+
+      .collapse-btn { display: none; }
 
       .topbar { padding: 0 16px; }
     }
@@ -472,6 +504,7 @@
   <div class="main">
     <div class="topbar">
       <button class="sidebar-toggle" onclick="openSidebar()">☰</button>
+      <button class="collapse-btn" id="collapseBtn" onclick="toggleSidebar()" title="Esconder barra lateral">◀</button>
       <div class="topbar-breadcrumb">
         Dashboards <span id="breadcrumb-current"></span>
       </div>
@@ -575,6 +608,14 @@
 
   function hideLoading() {
     document.getElementById('loadingOverlay').classList.add('hidden');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const btn = document.getElementById('collapseBtn');
+    const collapsed = sidebar.classList.toggle('collapsed');
+    btn.textContent = collapsed ? '▶' : '◀';
+    btn.title = collapsed ? 'Mostrar barra lateral' : 'Esconder barra lateral';
   }
 
   function openSidebar() {
