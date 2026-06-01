@@ -1,406 +1,592 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma DRPS - Gestão NR-01</title>
-    
-    <link rel="icon" type="image/png" href="./favicon.png">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'Montserrat', sans-serif; }
-        .nav-active { 
-            border-left: 4px solid #D4B895; 
-            background: linear-gradient(90deg, rgba(212, 184, 149, 0.15) 0%, transparent 100%);
-            color: #EFE4D7;
-        }
-        .tab-content { display: none; }
-        .tab-active  { display: block; }
-        .badge-baixo   { background: #6b9e78; color: white; }
-        .badge-medio   { background: #d4a373; color: white; }
-        .badge-alto    { background: #e2725b; color: white; }
-        .badge-critico { background: #c14953; color: white; }
-        .card-glow { box-shadow: 0 4px 20px rgba(139,107,83,0.08); transition: all 0.3s ease; }
-        .card-glow:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(139,107,83,0.15); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboards — Elis Formaio</title>
+  <link rel="icon" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ✅ Feedback do botão Sincronizar */
-        @keyframes fadeOut { 0%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
-        .sync-ok { animation: fadeOut 2.5s forwards; color: #6b9e78; font-weight: 700; font-size: 0.75rem; }
-    </style>
+    :root {
+      --cream: #F5F0E8;
+      --cream-light: #FDFAF5;
+      --brown-dark: #3D2510;
+      --brown: #6B4A2A;
+      --brown-light: #8B6B53;
+      --gold: #C8973A;
+      --gold-light: #E8B84B;
+      --green: #4A7C59;
+      --sidebar-w: 260px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--brown-dark);
+    }
+
+    .layout {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: linear-gradient(180deg, var(--brown-dark) 0%, #5A3520 100%);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 10;
+      box-shadow: 4px 0 20px rgba(61,37,16,0.25);
+    }
+
+    .sidebar-header {
+      padding: 28px 20px 24px;
+      border-bottom: 1px solid rgba(200,151,58,0.2);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-logo img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cream-light);
+      line-height: 1.2;
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.7rem;
+      color: rgba(245,240,232,0.55);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .nav {
+      flex: 1;
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .nav-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(200,151,58,0.6);
+      padding: 12px 10px 6px;
+      font-weight: 600;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      color: rgba(245,240,232,0.75);
+      font-size: 0.875rem;
+      font-weight: 400;
+      border: none;
+      background: transparent;
+      text-align: left;
+      width: 100%;
+    }
+
+    .nav-item:hover {
+      background: rgba(200,151,58,0.12);
+      color: var(--cream-light);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(200,151,58,0.25), rgba(200,151,58,0.1));
+      color: var(--gold-light);
+      font-weight: 500;
+      border: 1px solid rgba(200,151,58,0.3);
+    }
+
+    .nav-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    .nav-item.active .nav-icon {
+      background: rgba(200,151,58,0.2);
+    }
+
+    .nav-item-info { flex: 1; min-width: 0; }
+
+    .nav-item-name {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.875rem;
+    }
+
+    .nav-item-desc {
+      display: block;
+      font-size: 0.7rem;
+      color: rgba(245,240,232,0.4);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+
+    .nav-item.active .nav-item-desc { color: rgba(232,184,75,0.6); }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(200,151,58,0.15);
+      font-size: 0.7rem;
+      color: rgba(245,240,232,0.3);
+      text-align: center;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: 54px;
+      background: var(--cream-light);
+      border-bottom: 1px solid rgba(107,74,42,0.12);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .topbar-breadcrumb {
+      font-size: 0.8rem;
+      color: var(--brown-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar-breadcrumb span { color: var(--brown-dark); font-weight: 500; }
+
+    .topbar-spacer { flex: 1; }
+
+    .topbar-badge {
+      font-size: 0.7rem;
+      background: rgba(200,151,58,0.15);
+      color: var(--brown);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+      border: 1px solid rgba(200,151,58,0.25);
+    }
+
+    /* ── FRAME AREA ── */
+    .frame-area {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .frame-area iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+
+    .frame-area iframe.active {
+      display: block;
+    }
+
+    /* ── WELCOME ── */
+    .welcome {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      background: var(--cream);
+      gap: 40px;
+      overflow-y: auto;
+    }
+
+    .welcome.hidden { display: none; }
+
+    .welcome-header { text-align: center; }
+
+    .welcome-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      color: var(--brown-dark);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .welcome-header p {
+      font-size: 0.95rem;
+      color: var(--brown-light);
+      max-width: 480px;
+    }
+
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 820px;
+    }
+
+    .welcome-card {
+      background: var(--cream-light);
+      border: 1px solid rgba(107,74,42,0.12);
+      border-radius: 16px;
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+      transform-origin: left;
+    }
+
+    .welcome-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 8px 32px rgba(107,74,42,0.12);
+      transform: translateY(-3px);
+    }
+
+    .welcome-card:hover::before { transform: scaleX(1); }
+
+    .welcome-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, rgba(200,151,58,0.15), rgba(200,151,58,0.06));
+    }
+
+    .welcome-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--brown-dark);
+      line-height: 1.3;
+    }
+
+    .welcome-card p {
+      font-size: 0.78rem;
+      color: var(--brown-light);
+      line-height: 1.5;
+    }
+
+    .welcome-card-arrow {
+      margin-top: auto;
+      font-size: 0.75rem;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ── LOADING ── */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 5;
+      transition: opacity 0.3s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(200,151,58,0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      font-size: 0.85rem;
+      color: var(--brown-light);
+    }
+
+    /* ── MOBILE ── */
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      color: var(--brown);
+      font-size: 1.3rem;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 9;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar.open { transform: translateX(0); }
+
+      .sidebar-overlay.open { display: block; }
+
+      .sidebar-toggle { display: flex; align-items: center; }
+
+      .topbar { padding: 0 16px; }
+    }
+  </style>
 </head>
-<body class="bg-[#FDFBF7] flex h-screen overflow-hidden">
+<body>
 
-    <aside class="w-72 bg-gradient-to-b from-[#8B6B53] via-[#7A5A44] to-[#5C4033] text-[#FDFBF7] flex flex-col shadow-2xl">
-        <div class="p-8 border-b border-[#9D7E67] flex flex-col items-center text-center">
-            <img src="./logo.png" alt="Logo" class="w-32 object-contain mb-4 drop-shadow-md">
-            <h1 class="text-xl font-black tracking-wider uppercase text-[#FDFBF7]">NR-01 Digital</h1>
-            <p class="text-[#D4B895] text-xs mt-1 font-medium">Gestão de Riscos Psicossociais</p>
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="logo.png" alt="Elis Formaio" onerror="this.style.display='none'" />
+        <div>
+          <div class="sidebar-title">Elis Formaio</div>
         </div>
-        
-        <nav class="flex-1 mt-6 space-y-2 px-4">
-            <a href="#" onclick="showTab('dashboard')" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#6b4c3a] transition nav-active" id="btn-dashboard">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="2"></path></svg>
-                <span class="font-semibold text-sm tracking-wide">Painel Geral</span>
-            </a>
-            <a href="#" onclick="showTab('analise')" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#6b4c3a] transition text-[#E8D8C8]" id="btn-analise">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-width="2"></path></svg>
-                <span class="font-semibold text-sm tracking-wide">Análise de Dados</span>
-            </a>
-            <a href="#" onclick="showTab('medidas')" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#6b4c3a] transition text-[#E8D8C8]" id="btn-medidas">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"></path></svg>
-                <span class="font-semibold text-sm tracking-wide">Plano de Ação</span>
-            </a>
-        </nav>
-        
-        <div class="p-6 bg-[#4A3226] border-t border-[#6b4c3a] text-center">
-            <div class="text-[10px] text-[#D4B895] mb-1 tracking-widest uppercase">Responsável Técnico</div>
-            <div class="text-sm font-bold text-[#FDFBF7]" id="resp-tecnico">Sistema Online</div>
+      </div>
+      <div class="sidebar-subtitle">Central de Dashboards</div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section-label">Navegação</div>
+
+      <button class="nav-item active" data-id="home" onclick="selectDash(this, 'home')">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-item-info">
+          <span class="nav-item-name">Início</span>
+          <span class="nav-item-desc">Visão geral</span>
         </div>
-    </aside>
+      </button>
 
-    <main class="flex-1 flex flex-col overflow-hidden">
-        <header class="bg-white/90 backdrop-blur-md border-b border-[#E6DCD3] p-5 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-            <div class="flex gap-4 items-center">
-                <select id="filtroSetor" onchange="carregarDadosReais()" class="bg-[#FDFBF7] border-2 border-[#D4B895] text-[#5C4033] rounded-lg px-4 py-2 text-sm font-bold focus:ring-2 focus:ring-[#8B6B53] outline-none cursor-pointer">
-                    <option value="">Todos os Setores (Geral)</option>
-                    <option value="Administrativo">Administrativo/Financeiro</option>
-                    <option value="Financeiro">Cuidado e bem estar</option>
-                    <option value="Centro terapêuticos">Centro terapêuticos</option>
-                    <option value="Comercial">Comercial</option>
-                    <option value="Marketing">Marketing</option>
-                </select>
+      <div class="nav-section-label" style="margin-top:8px">Dashboards</div>
 
-                <button id="btnSync" onclick="carregarDadosReais(true)" class="bg-[#8B6B53] hover:bg-[#7A5A44] text-[#FDFBF7] px-6 py-2.5 rounded-lg text-sm font-bold shadow-md hover:shadow-lg flex items-center gap-2 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2"></path></svg>
-                    Sincronizar
-                </button>
-                <span id="msgSync" class="hidden"></span>
-            </div>
-
-            <div id="loader" class="hidden flex items-center gap-2 text-[#8B6B53] font-bold animate-pulse">
-                <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span class="text-sm">Atualizando...</span>
-            </div>
-        </header>
-
-        <div id="area-impressao" class="flex-1 overflow-y-auto p-8">
-
-            <section id="tab-dashboard" class="tab-content tab-active">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 text-center">
-                    <div class="bg-white p-6 rounded-xl card-glow border-l-4 border-[#8B6B53]">
-                        <p class="text-[#9D7E67] text-[10px] font-bold uppercase tracking-widest mb-1">Gravidade Média</p>
-                        <h3 id="card-gravidade-media" class="text-4xl font-black text-[#5C4033]">--</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl card-glow border-l-4 border-[#c14953]">
-                        <p class="text-[#9D7E67] text-[10px] font-bold uppercase tracking-widest mb-1">Alertas Críticos</p>
-                        <h3 id="card-critico" class="text-4xl font-black text-[#c14953]">--</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl card-glow border-l-4 border-[#e2725b]">
-                        <p class="text-[#9D7E67] text-[10px] font-bold uppercase tracking-widest mb-1">Alertas Altos</p>
-                        <h3 id="card-alto" class="text-4xl font-black text-[#e2725b]">--</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl card-glow border-l-4 border-[#D4B895]">
-                        <p class="text-[#9D7E67] text-[10px] font-bold uppercase tracking-widest mb-1">Setor Analisado</p>
-                        <h3 id="card-setor" class="text-2xl font-black text-[#8B6B53] truncate mt-2">Geral</h3>
-                    </div>
-                </div>
-
-                <p id="ultima-atualizacao" class="text-[10px] text-[#B0907A] font-medium mb-6 text-right tracking-wide"></p>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    <div class="bg-white p-8 rounded-xl card-glow h-[420px]">
-                        <h4 class="font-bold text-[#5C4033] text-sm uppercase mb-6 tracking-wider">Matriz de Risco Geral</h4>
-                        <div class="h-[300px] flex items-center justify-center"><canvas id="chartDoughnut"></canvas></div>
-                    </div>
-                    <div class="bg-white p-8 rounded-xl card-glow h-[420px]">
-                        <h4 class="font-bold text-[#5C4033] text-sm uppercase mb-6 tracking-wider">Perfil por Tópico</h4>
-                        <canvas id="chartRadar"></canvas>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl card-glow">
-                    <h4 class="font-bold text-[#5C4033] text-sm uppercase tracking-wider mb-4">Ranking de Intervenção</h4>
-                    <div style="height:260px;position:relative;"><canvas id="chartBar"></canvas></div>
-                </div>
-            </section>
-
-            <section id="tab-analise" class="tab-content">
-                <div class="bg-white rounded-xl card-glow overflow-hidden border border-[#E6DCD3]">
-                    <div class="bg-[#5C4033] p-6 text-[#FDFBF7] font-bold text-lg uppercase tracking-widest">Relatório Quantitativo</div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-[#FDFBF7] text-[#8B6B53] uppercase text-[10px] font-black border-b border-[#E6DCD3]">
-                                <tr>
-                                    <th class="px-6 py-4">Fator de Risco</th>
-                                    <th class="px-6 py-4 text-center">Gravidade</th>
-                                    <th class="px-6 py-4 text-center">Probabilidade</th>
-                                    <th class="px-6 py-4 text-center">Classificação</th>
-                                    <th class="px-6 py-4">Observações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabela-analise" class="divide-y divide-[#F5F0EA]"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section id="tab-medidas" class="tab-content">
-                <div class="bg-white p-8 rounded-xl card-glow border border-[#E6DCD3]">
-                    <div class="flex justify-between mb-8">
-                        <div>
-                            <h3 class="font-bold text-[#5C4033] text-xl uppercase">Cronograma de Intervenção</h3>
-                            <p class="text-[#9D7E67] text-xs">Plano estratégico anual</p>
-                        </div>
-                        <button onclick="gerarPDF()" class="bg-[#8B6B53] text-[#FDFBF7] px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2">Exportar PDF</button>
-                    </div>
-                    <div class="grid grid-cols-12 gap-2 text-center text-[10px] font-black text-[#9D7E67] border-b pb-3 uppercase tracking-widest">
-                        <div class="col-span-3 text-left">Ação Sugerida</div>
-                        <div>Mês 1</div><div>Mês 2</div><div>Mês 3</div><div>Mês 4</div>
-                        <div>Mês 5</div><div>Mês 6</div><div>Mês 7</div><div>Mês 8</div><div>Mês 9</div>
-                    </div>
-                    <div id="lista-medidas" class="space-y-4"></div>
-                </div>
-            </section>
-
+      <button class="nav-item" data-id="nr01" onclick="selectDash(this, 'nr01')">
+        <div class="nav-icon">📋</div>
+        <div class="nav-item-info">
+          <span class="nav-item-name">Riscos Psicossociais</span>
+          <span class="nav-item-desc">NR-01 · Gestão de riscos</span>
         </div>
-    </main>
+      </button>
 
-    <script>
-        // ✅ URL do Apps Script
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxLE9AGFXJTXepfX1EL1q5FKv5FCPrVoXrbSsUNDHeFlUaWLYi2Ia559WpQE8-Ebgw8/exec';
+      <button class="nav-item" data-id="lideranca" onclick="selectDash(this, 'lideranca')">
+        <div class="nav-icon">🏆</div>
+        <div class="nav-item-info">
+          <span class="nav-item-name">Liderança 12</span>
+          <span class="nav-item-desc">Imersão · Satisfação</span>
+        </div>
+      </button>
 
-        let charts = {};
-        let dadosAtuais = { topicos: [] };
+      <button class="nav-item" data-id="mentoria" onclick="selectDash(this, 'mentoria')">
+        <div class="nav-icon">💫</div>
+        <div class="nav-item-info">
+          <span class="nav-item-name">Mentoria T10</span>
+          <span class="nav-item-desc">Mulheres · Transformação</span>
+        </div>
+      </button>
+    </nav>
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('tab-active'));
-            document.getElementById('tab-' + tabId).classList.add('tab-active');
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('nav-active'));
-            document.getElementById('btn-' + tabId).classList.add('nav-active');
-        }
+    <div class="sidebar-footer">Elis Formaio © 2026</div>
+  </aside>
 
-        function calcularRiscoFinal(g, p) {
-            const prod = g * p;
-            if (prod >= 6.25) return 'Crítico';
-            if (prod >= 3.75) return 'Alto';
-            if (prod >= 2.25) return 'Médio';
-            return 'Baixo';
-        }
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-        function getBadge(nivel) {
-            const map = { 'Baixo': 'badge-baixo', 'Médio': 'badge-medio', 'Alto': 'badge-alto', 'Crítico': 'badge-critico' };
-            return map[nivel] || 'badge-baixo';
-        }
+  <div class="main">
+    <div class="topbar">
+      <button class="sidebar-toggle" onclick="openSidebar()">☰</button>
+      <div class="topbar-breadcrumb">
+        Dashboards <span id="breadcrumb-current"></span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-badge">Elis Formaio</div>
+    </div>
 
-        // ✅ ANTI-CACHE: timestamp único em cada fetch + cache: "no-store"
-        async function carregarDadosReais(viaBtn = false) {
-            document.getElementById('loader').classList.remove('hidden');
-            document.getElementById('msgSync').classList.add('hidden');
+    <div class="frame-area" id="frameArea">
 
-            const setor = document.getElementById('filtroSetor').value || "Geral";
-            const urlFresh = `${API_URL}?setor=${encodeURIComponent(setor)}&t=${Date.now()}`;
+      <div class="welcome" id="welcome">
+        <div class="welcome-header">
+          <h1>Central de Dashboards</h1>
+          <p>Selecione um dashboard para visualizar os dados.</p>
+        </div>
 
-            try {
-                const resp = await fetch(urlFresh, { cache: "no-store" });
-                const data = await resp.json();
+        <div class="welcome-grid">
+          <div class="welcome-card" onclick="selectDashById('nr01')">
+            <div class="welcome-card-icon">📋</div>
+            <h3>Riscos Psicossociais</h3>
+            <p>Gestão de riscos NR-01 com matriz de prioridades e plano de ação.</p>
+            <div class="welcome-card-arrow">Abrir dashboard →</div>
+          </div>
 
-                dadosAtuais = {
-                    topicos: (data.topicos || []).map(t => ({
-                        ...t,
-                        nome:          t.nome || "Tópico sem nome",
-                        gravidade:     (isNaN(Number(t.gravidade))     || Number(t.gravidade)     === 0) ? 0 : Number(t.gravidade),
-                        probabilidade: (isNaN(Number(t.probabilidade)) || Number(t.probabilidade) === 0) ? 1 : Number(t.probabilidade)
-                    }))
-                };
+          <div class="welcome-card" onclick="selectDashById('lideranca')">
+            <div class="welcome-card-icon">🏆</div>
+            <h3>Liderança 12</h3>
+            <p>Resultados de satisfação da Imersão de Liderança Humanizada e Positiva.</p>
+            <div class="welcome-card-arrow">Abrir dashboard →</div>
+          </div>
 
-                atualizarInterface(data.setor || "Geral", data.geradoEm);
+          <div class="welcome-card" onclick="selectDashById('mentoria')">
+            <div class="welcome-card-icon">💫</div>
+            <h3>Mentoria T10</h3>
+            <p>Acompanhamento e feedback da Mentoria para Mulheres — programa T10.</p>
+            <div class="welcome-card-arrow">Abrir dashboard →</div>
+          </div>
+        </div>
+      </div>
 
-                // ✅ Feedback visual ao clicar em Sincronizar
-                if (viaBtn) {
-                    const msg = document.getElementById('msgSync');
-                    msg.textContent = '✔ Dados atualizados!';
-                    msg.className = 'sync-ok';
-                    msg.classList.remove('hidden');
-                    setTimeout(() => msg.classList.add('hidden'), 3000);
-                }
+      <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Carregando dashboard...</div>
+      </div>
 
-            } catch (e) {
-                console.error('Erro ao buscar dados:', e);
-            } finally {
-                document.getElementById('loader').classList.add('hidden');
-            }
-        }
+      <iframe id="frame-nr01"      src="" data-src="nr01.html"                                                                      title="Riscos Psicossociais"></iframe>
+      <iframe id="frame-lideranca" src="" data-src="https://efservicosterapeuticos-ctrl.github.io/Eventos.dasboard/"                title="Liderança 12"></iframe>
+      <iframe id="frame-mentoria"  src="" data-src="https://efservicosterapeuticos-ctrl.github.io/Eventos_online.Dashboard/"        title="Mentoria T10"></iframe>
 
-        function atualizarInterface(setorNome, geradoEm) {
-            const topicos = dadosAtuais.topicos;
-            if (!topicos || topicos.length === 0) return;
+    </div>
+  </div>
+</div>
 
-            const resumo = { baixo: 0, medio: 0, alto: 0, critico: 0 };
-            let somaGravidade = 0;
-            let temDadosValidos = false;
+<script>
+  const DASH = {
+    home:      { label: '',                        frameId: null },
+    nr01:      { label: '/ Riscos Psicossociais',  frameId: 'frame-nr01' },
+    lideranca: { label: '/ Liderança 12',           frameId: 'frame-lideranca' },
+    mentoria:  { label: '/ Mentoria T10',           frameId: 'frame-mentoria' },
+  };
 
-            topicos.forEach(t => {
-                if (t.gravidade > 0) {
-                    const nivel = calcularRiscoFinal(t.gravidade, t.probabilidade);
-                    if      (nivel === 'Baixo')   resumo.baixo++;
-                    else if (nivel === 'Médio')   resumo.medio++;
-                    else if (nivel === 'Alto')    resumo.alto++;
-                    else if (nivel === 'Crítico') resumo.critico++;
-                    somaGravidade += t.gravidade;
-                    temDadosValidos = true;
-                }
-            });
+  function selectDash(btn, id) {
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    btn.classList.add('active');
+    loadDash(id);
+    closeSidebar();
+  }
 
-            const media = temDadosValidos
-                ? (somaGravidade / topicos.filter(t => t.gravidade > 0).length)
-                : 0;
+  function selectDashById(id) {
+    const btn = document.querySelector(`.nav-item[data-id="${id}"]`);
+    if (btn) selectDash(btn, id);
+  }
 
-            document.getElementById('card-gravidade-media').innerText = media > 0 ? media.toFixed(1) : '--';
-            document.getElementById('card-critico').innerText = resumo.critico > 0 ? resumo.critico : '--';
-            document.getElementById('card-alto').innerText    = resumo.alto    > 0 ? resumo.alto    : '--';
-            document.getElementById('card-setor').innerText  = setorNome;
+  function loadDash(id) {
+    const cfg = DASH[id];
+    document.getElementById('breadcrumb-current').textContent = cfg.label;
+    const welcome = document.getElementById('welcome');
 
-            // ✅ Exibe timestamp da última leitura da planilha
-            if (geradoEm) {
-                const dt = new Date(geradoEm);
-                document.getElementById('ultima-atualizacao').innerText =
-                    `Dados da planilha em: ${dt.toLocaleDateString('pt-BR')} às ${dt.toLocaleTimeString('pt-BR')}`;
-            }
+    if (id === 'home') {
+      welcome.classList.remove('hidden');
+      document.querySelectorAll('.frame-area iframe').forEach(f => f.classList.remove('active'));
+      return;
+    }
 
-            Chart.defaults.font.family = "'Montserrat', sans-serif";
-            Chart.defaults.color = "#7A5A44";
+    welcome.classList.add('hidden');
+    document.querySelectorAll('.frame-area iframe').forEach(f => f.classList.remove('active'));
 
-            renderDoughnut(resumo);
-            renderRadar(topicos);
-            renderBar(topicos);
-            renderTabela(topicos);
-            renderMedidas(topicos);
-        }
+    const frame = document.getElementById(cfg.frameId);
 
-        function renderDoughnut(res) {
-            const ctx = document.getElementById('chartDoughnut');
-            if (charts.doughnut) charts.doughnut.destroy();
-            if (res.baixo === 0 && res.medio === 0 && res.alto === 0 && res.critico === 0) return;
-            charts.doughnut = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Baixo','Médio','Alto','Crítico'],
-                    datasets: [{
-                        data: [res.baixo, res.medio, res.alto, res.critico],
-                        backgroundColor: ['#6b9e78','#d4a373','#e2725b','#c14953'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-            });
-        }
+    if (!frame.src || frame.src === window.location.href) {
+      showLoading();
+      frame.src = frame.dataset.src;
+      frame.onload = hideLoading;
+    }
 
-        function renderRadar(topicos) {
-            const ctx = document.getElementById('chartRadar');
-            if (charts.radar) charts.radar.destroy();
-            charts.radar = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: topicos.map(t => t.nome.split('-')[0].trim()),
-                    datasets: [{
-                        label: 'Gravidade',
-                        data: topicos.map(t => t.gravidade),
-                        backgroundColor: 'rgba(139,107,83,0.15)',
-                        borderColor: '#8B6B53',
-                        borderWidth: 2,
-                        pointRadius: 3
-                    }]
-                },
-                options: {
-                    scales: { r: { beginAtZero: true, max: 3, ticks: { display: false } } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
+    frame.classList.add('active');
+  }
 
-        function renderBar(topicos) {
-            const ctx = document.getElementById('chartBar');
-            if (charts.bar) charts.bar.destroy();
-            const ordenados = topicos.map(t => ({ ...t, r: t.gravidade * t.probabilidade })).sort((a,b) => b.r - a.r);
-            charts.bar = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ordenados.map(t => t.nome.length > 30 ? t.nome.substring(0,27)+'...' : t.nome),
-                    datasets: [{
-                        data: ordenados.map(t => t.r),
-                        backgroundColor: ordenados.map(t => {
-                            const n = calcularRiscoFinal(t.gravidade, t.probabilidade);
-                            return n === 'Crítico' ? '#c14953' : n === 'Alto' ? '#e2725b' : n === 'Médio' ? '#d4a373' : '#6b9e78';
-                        }),
-                        barThickness: 14, borderRadius: 4
-                    }]
-                },
-                options: {
-                    indexAxis: 'y', maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { beginAtZero: true, max: 9, grid: { display: false } },
-                        y: { grid: { display: false }, ticks: { font: { size: 9 } } }
-                    }
-                }
-            });
-        }
+  function showLoading() {
+    document.getElementById('loadingOverlay').classList.remove('hidden');
+  }
 
-        function renderTabela(topicos) {
-            document.getElementById('tabela-analise').innerHTML = topicos.map(t => {
-                const nivel = calcularRiscoFinal(t.gravidade, t.probabilidade);
-                return `<tr class="hover:bg-[#FDFBF7] transition-colors">
-                    <td class="px-6 py-4 font-bold text-[#5C4033]">${t.nome}</td>
-                    <td class="px-6 py-4 text-center font-bold text-[#8B6B53]">${t.gravidade.toFixed(1)}</td>
-                    <td class="px-6 py-4 text-center font-bold text-[#8B6B53]">${t.probabilidade.toFixed(1)}</td>
-                    <td class="px-6 py-4 text-center"><span class="px-3 py-1 rounded-full text-[10px] font-black uppercase ${getBadge(nivel)}">${nivel}</span></td>
-                    <td class="px-6 py-4 text-xs text-[#9D7E67] italic font-medium">Análise NR-01</td>
-                </tr>`;
-            }).join('');
-        }
+  function hideLoading() {
+    document.getElementById('loadingOverlay').classList.add('hidden');
+  }
 
-        // ✅ CORREÇÃO: Exibir nome completo do tópico na área de medidas
-        function renderMedidas(topicos) {
-            const acoes = topicos.filter(t => (t.gravidade * t.probabilidade) > 2.2);
-            document.getElementById('lista-medidas').innerHTML = acoes.map(t => {
-                const risco = calcularRiscoFinal(t.gravidade, t.probabilidade);
-                const cor = risco === 'Crítico' ? 'bg-[#c14953]' : 'bg-[#e2725b]';
-                return `<div class="grid grid-cols-12 gap-2 items-start p-2">
-                    <div class="col-span-3 text-[9px] font-bold text-[#5C4033] whitespace-normal pr-2 leading-tight">${t.nome}</div>
-                    ${Array(6).fill(`<div class="h-3 ${cor} rounded shadow-sm opacity-90"></div>`).join('')}
-                    ${Array(3).fill('<div class="h-3 bg-[#E6DCD3] rounded"></div>').join('')}
-                </div>`;
-            }).join('');
-        }
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('open');
+  }
 
-        function gerarPDF() {
-            const btn = event.target;
-            const original = btn.innerText;
-            btn.innerText = 'Gerando...';
-            const opt = {
-                margin: 5,
-                filename: 'Relatorio_NR01.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(document.getElementById('area-impressao')).save()
-                .then(() => { btn.innerText = original; });
-        }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+</script>
 
-        // ✅ Carrega dados frescos ao abrir a página
-        window.onload = () => carregarDadosReais(false);
-    </script>
 </body>
 </html>
