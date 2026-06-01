@@ -273,7 +273,7 @@
       <button class="nav-item" data-id="lideranca" onclick="selectDash(this, 'lideranca')">
         <div class="nav-icon">🏆</div>
         <div class="nav-item-info">
-          <span class="nav-item-name">Liderança 12</span>
+          <span class="nav-item-name">NPS Eventos Físicos</span>
           <span class="nav-item-desc">Imersão · Satisfação</span>
         </div>
       </button>
@@ -281,8 +281,8 @@
       <button class="nav-item" data-id="mentoria" onclick="selectDash(this, 'mentoria')">
         <div class="nav-icon">💫</div>
         <div class="nav-item-info">
-          <span class="nav-item-name">Mentoria T10</span>
-          <span class="nav-item-desc">Mulheres · Transformação</span>
+          <span class="nav-item-name">NPS Eventos Online</span>
+          <span class="nav-item-desc">Mentoria · Satisfação</span>
         </div>
       </button>
     </nav>
@@ -332,15 +332,15 @@
 
           <div class="welcome-card" onclick="selectDashById('lideranca')">
             <div class="welcome-card-icon">🏆</div>
-            <h3>Liderança 12</h3>
-            <p>Resultados de satisfação da Imersão de Liderança Humanizada e Positiva.</p>
+            <h3>NPS Eventos Físicos</h3>
+            <p>Resultados de satisfação de eventos e imersões presenciais.</p>
             <div class="welcome-card-arrow">Abrir dashboard →</div>
           </div>
 
           <div class="welcome-card" onclick="selectDashById('mentoria')">
             <div class="welcome-card-icon">💫</div>
-            <h3>Mentoria T10</h3>
-            <p>Acompanhamento e feedback da Mentoria para Mulheres — programa T10.</p>
+            <h3>NPS Eventos Online</h3>
+            <p>Resultados de satisfação de mentorias e eventos online.</p>
             <div class="welcome-card-arrow">Abrir dashboard →</div>
           </div>
         </div>
@@ -363,8 +363,8 @@
   const DASH = {
     home:      { label: '',                       frameId: null },
     nr01:      { label: '/ Riscos Psicossociais', frameId: 'frame-nr01' },
-    lideranca: { label: '/ Liderança 12',          frameId: 'frame-lideranca' },
-    mentoria:  { label: '/ Mentoria T10',          frameId: 'frame-mentoria' },
+    lideranca: { label: '/ NPS Eventos Físicos',   frameId: 'frame-lideranca' },
+    mentoria:  { label: '/ NPS Eventos Online',    frameId: 'frame-mentoria' },
   };
 
   let currentDash = 'home';
