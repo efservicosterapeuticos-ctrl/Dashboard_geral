@@ -613,9 +613,27 @@
   function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const btn = document.getElementById('collapseBtn');
+
+    const hasActiveFrame = !!document.querySelector('.frame-area iframe.active');
+    if (hasActiveFrame) showLoading();
+
     const collapsed = sidebar.classList.toggle('collapsed');
     btn.textContent = collapsed ? '▶' : '◀';
     btn.title = collapsed ? 'Mostrar barra lateral' : 'Esconder barra lateral';
+
+    setTimeout(() => {
+      document.querySelectorAll('.frame-area iframe.active').forEach(frame => {
+        try {
+          frame.contentWindow.dispatchEvent(new Event('resize'));
+        } catch(e) {
+          // cross-origin: força reflow no iframe
+          frame.style.width = '99.99%';
+          frame.offsetHeight;
+          frame.style.width = '100%';
+        }
+      });
+      if (hasActiveFrame) hideLoading();
+    }, 320);
   }
 
   function openSidebar() {
